@@ -1,0 +1,58 @@
+﻿@model GebietUndStadt.Models.Oblast
+
+<h2>Select Oblast:</h2>
+
+<form asp-controller="Location" asp-action="Index" method="post">
+    <select id="oblastDropdown" name="oblastId">
+        @foreach (var oblast in ViewBag.Oblasts)
+        {
+            <option value="@oblast.Id">@oblast.Name</option>
+        }
+    </select>
+</form>
+
+<h2>Select Cities:</h2>
+<select id="cityDropdown">
+</select>
+
+<h2>Select Streets:</h2>
+<select id="streetDropdown">
+</select>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#oblastDropdown').change(function () {
+                var oblastId = $(this).val();
+                $.ajax({
+                    url: '/Home/GetCities',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { oblastId: oblastId },
+                    success: function (data) {
+                        $('#cityDropdown').empty();
+                        $.each(data, function (index, city) {
+                            $('#cityDropdown').append($('<option>').text(city.name).attr('value', city.id));
+                        });
+                    }
+                });
+            });
+
+            $('#cityDropdown').change(function () {
+                var cityId = $(this).val();
+                $.ajax({
+                    url: '/Home/GetStreets',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { cityId: cityId },
+                    success: function (data) {
+                        $('#streetDropdown').empty();
+                        $.each(data, function (index, street) {
+                            $('#streetDropdown').append($('<option>').text(street.name).attr('value', street.id));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

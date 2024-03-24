@@ -1,0 +1,8 @@
+﻿namespace GebietUndStadt.Models
+{
+    public class Oblast
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}
